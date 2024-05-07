@@ -1,13 +1,20 @@
 import os
-
 import google.generativeai as genai
 from dotenv import load_dotenv
 import streamlit as st
 
 load_dotenv()
 
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-model = genai.GenerativeModel('gemini-pro')
+# 获取 API KEY
+api_key = os.getenv("GOOGLE_API_KEY")
+
+# 设置 API KEY 输入框
+api_key_input = st.text_input("Enter your API key:", value=api_key, key="api_key")
+
+# 配置 API 如果 API KEY 被输入
+if api_key_input:
+    genai.configure(api_key=api_key_input)
+    model = genai.GenerativeModel('gemini-pro')
 
 prompt_template = """
 You are very skilled at writing Vlog scripts. 
@@ -19,7 +26,6 @@ Please include the following details:
 - Content:
   segments; details; visuals and interactions
 - Conclusions
-
 
 The user's request is:
 {prompt}
@@ -33,6 +39,11 @@ st.title("🏝️ Vlog Director")
 
 prompt = st.text_area("Enter your daily life or activities:")
 if st.button("Give me a Vlog script!"):
-    print(prompt)
-    reply = generate_content(prompt)
-    st.write(reply)
+    if api_key_input:  # 确保 API KEY 已经被输入
+        if prompt:
+            reply = generate_content(prompt)
+            st.write(reply)
+        else:
+            st.error("Please enter a description of your daily life or activities.")
+    else:
+        st.error("API key is required to run this app!")
