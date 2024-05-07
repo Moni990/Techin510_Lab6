@@ -6,7 +6,7 @@ import streamlit as st
 load_dotenv()
 
 api_key = os.getenv("GOOGLE_API_KEY")
-api_key_input = st.text_input("Enter your API key:", value=api_key, type='password')
+api_key_input = st.text_input("Enter Gemini API key:", value=api_key, type='password')
 
 if api_key_input:
     genai.configure(api_key=api_key_input)
