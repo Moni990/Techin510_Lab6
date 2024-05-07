@@ -5,13 +5,9 @@ import streamlit as st
 
 load_dotenv()
 
-# 获取 API KEY
 api_key = os.getenv("GOOGLE_API_KEY")
+api_key_input = st.text_input("Enter your API key:", value=api_key, type='password')
 
-# 设置 API KEY 输入框
-api_key_input = st.text_input("Enter your API key:", value=api_key, key="api_key")
-
-# 配置 API 如果 API KEY 被输入
 if api_key_input:
     genai.configure(api_key=api_key_input)
     model = genai.GenerativeModel('gemini-pro')
@@ -39,7 +35,7 @@ st.title("🏝️ Vlog Director")
 
 prompt = st.text_area("Enter your daily life or activities:")
 if st.button("Give me a Vlog script!"):
-    if api_key_input:  # 确保 API KEY 已经被输入
+    if api_key_input:  
         if prompt:
             reply = generate_content(prompt)
             st.write(reply)
